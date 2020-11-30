@@ -23,8 +23,8 @@ app.use(cors())
 
 app.use(morgan('dev'))
 
-import postRouter from './router/posts'
-import { errorhandle } from './middlewares/errorHandle';
+import postRouter from './Api/router/posts'
+import { errorhandle } from './Api/middlewares/errorHandle';
 
 
 app.use(postRouter)

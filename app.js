@@ -1,51 +1,34 @@
 
 
-import express from 'express'
 import bodyparser from 'body-parser'
-import mongoose from 'mongoose'
 import cors from 'cors'
-const app = express()
 import dotenv from 'dotenv'
+import express from 'express'
 import morgan from 'morgan'
+import {infologger,errorLogger} from './Api/middlewares/logger'
+import { errorhandle  ,setCorrelationId} from './Api/middlewares/appMiddlewares'
+import {DBCON} from './config/dbCon'
+
+const app = express()
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config({ path: './config/config.env' })
+    app.use(morgan('dev'))
 }
 
 
-const PORT = process.env.PORT 
 const mongourl = process.env.MONGODBURL
 
 app.use(bodyparser.json({ limit: "30mb", extended: true }))
 app.use(bodyparser.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors())
 
-
-app.use(morgan('dev'))
-
+DBCON(mongourl)
+app.use(setCorrelationId)
 import postRouter from './Api/router/posts'
-import { errorhandle } from './Api/middlewares/errorHandle';
-
-
+app.use(infologger() )
 app.use(postRouter)
+app.use(errorLogger (mongourl))
 app.use(errorhandle)
 
-mongoose.connect(mongourl, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => app.listen(PORT, () => {
-        console.log(`server is runniung on ${PORT}`)
-    }))
-    .catch((err) => console.log(err.message));
-
-mongoose.set('useFindAndModify', false)
-
-
-
-
-
-
-
-
-
-
-
-
+export default app

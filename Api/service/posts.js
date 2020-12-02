@@ -4,7 +4,6 @@ import { NotFound } from './../utils/error';
 export const createPostService  = async(post)=>{
     
     const newpost = new POST(post)
-    console.log(post)
     const  savepost  = await newpost.save()
     return savepost;
 

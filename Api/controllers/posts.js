@@ -3,6 +3,7 @@ import { createPostService, deletePostService, getPostService, updatePostService
 import { NotFound } from './../utils/error';
 
 
+
 export const getposts = async (req, res, next) => {
     try {
         const posts =await getPostService()
@@ -30,6 +31,9 @@ export const createPost = async(req, res, next) => {
     try {
         const data = req.body
         const newpost = await createPostService(data)
+        if(newpost instanceof Error){
+            return next(newpost ,req ,res)
+        }
         return res.status(201).json({
             success:true,
             newpost
@@ -37,34 +41,21 @@ export const createPost = async(req, res, next) => {
     
    
 } catch (error) {
-    return res.status(404).json({
-        success:false,
-        message:error.message
-    }) 
+    return next(error ,req ,res)
 }
 
     
 }
 
-export const updatePost = async(req, res)=>{
-    // try {
-
-        const id =req.params.id
-       const newid = mongoose.isValidObjectId(id)
-       if (newid) {
+export const updatePost = async(req, res,next)=>{
+    try {
         const body = req.body
         const post =  updatePostService(id ,body)
          
       if( post instanceof Error){
         
-        return res.status(404).json({
-            success:false,
-            message:post.message,
-    
-       
-        })
-           
-       
+        return next(post ,req ,res)
+
     }else{
         return res.status(201).json({
             success:true,
@@ -74,17 +65,12 @@ export const updatePost = async(req, res)=>{
         })
        
     }
+}catch(error){
+    return next(error ,req ,res)
 
-           
-       }else{
-        return res.status(400).json({
-            success:false,
-            message:`Id is not valid`,
-    
-       
-        })
-       }
-       
+}
+
+     
 
 
 }
@@ -93,11 +79,7 @@ export const updatePost = async(req, res)=>{
 export const deletePost = async(req, res , next)=>{
     try {
         const id =req.params.id
-       
-        // const newid = mongoose.isValidObjectId(id)
-        // if (newid) {
-     
-    
+
             const result = await deletePostService(id)
 
             if(result instanceof Error ){
@@ -110,22 +92,10 @@ export const deletePost = async(req, res , next)=>{
                     message:`Post Deleted` 
                 })
                    }
-       
 
-      
-
-
-    // }else{
-    //     return res.status(404).json({
-    //         success:false,
-    //         message:`id is not valid`
-    //     }) 
-    // }
 } catch (error) {
     return next(error ,req ,res)
     
 }
-
-
 
 }

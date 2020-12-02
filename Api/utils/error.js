@@ -1,7 +1,7 @@
 export class GenaralError extends Error {
         constructor(message){
             super()
-            console.log(this)
+         
             this.message = message
         }
 
@@ -10,9 +10,18 @@ export class GenaralError extends Error {
 }
 
 export class BadRequest extends GenaralError{
+        constructor(message){
+                super(message)
+                this.name = 'BadRequest'
+        }
         getCode () {return 400}
 }
 
 export class NotFound extends GenaralError{
+        constructor(message){
+                super(message)
+                this.name = 'Not Found'
+
+        }
         getCode() {return 404}
 }

@@ -1,7 +1,21 @@
 export const getPostService = async()=>{
     const posts = [
         {
-          "_id": "5fc69fb6ab468f2bdc530d97",
+          "_id": "1",
+    "title": "Book app",
+    "creator": "sakib",
+    "message": "hello this is a demo",
+    "__v": 0
+        },
+          {
+          "_id": "2",
+    "title": "Book app",
+    "creator": "sakib",
+    "message": "hello this is a demo",
+    "__v": 0
+        },
+          {
+          "_id": "3",
     "title": "Book app",
     "creator": "sakib",
     "message": "hello this is a demo",

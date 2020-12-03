@@ -27,7 +27,20 @@ const mongoErrorTransport = (mongourl) => new winston.transports.MongoDB({
 }
 
 )
-const fileinfoTransport = new winston.transports.DailyRotateFile(
+// const fileinfoTransport = new winston.transports.DailyRotateFile(
+//     {
+//     filename:'loginfo-%DATE%.log',
+//     datePattern:'YYYY-MM-DD-HH',
+//     zippedArchive:true,
+//     maxSize:'20m',
+//     maxFiles:'14d',
+// }
+// )
+
+ export const infologger = ()=> expressWinston.logger({
+    transports:[
+        new winston.transports.Console(),
+         new winston.transports.DailyRotateFile(
     {
     filename:'loginfo-%DATE%.log',
     datePattern:'YYYY-MM-DD-HH',
@@ -36,11 +49,7 @@ const fileinfoTransport = new winston.transports.DailyRotateFile(
     maxFiles:'14d',
 }
 )
-
- export const infologger = ()=> expressWinston.logger({
-    transports:[
-        new winston.transports.Console(),
-        fileinfoTransport,
+,
         elasticTransport
     ],
     format:winston.format.combine(
@@ -53,7 +62,19 @@ const fileinfoTransport = new winston.transports.DailyRotateFile(
     })
     
 
-    const errorFileinfo  =  new winston.transports.DailyRotateFile(
+    // const errorFileinfo  =  new winston.transports.DailyRotateFile(
+    //     {
+    //         filename:'logError-%DATE%.log',
+    //         datePattern:'YYYY-MM-DD-HH',
+    //         zippedArchive:true,
+    //         maxSize:'20m',
+    //         maxFiles:'14d'
+    //     }
+    // )
+ export  const errorLogger = (mongourl)=> expressWinston.errorLogger({
+    transports:[
+        new winston.transports.Console(),
+        new winston.transports.DailyRotateFile(
         {
             filename:'logError-%DATE%.log',
             datePattern:'YYYY-MM-DD-HH',
@@ -61,11 +82,7 @@ const fileinfoTransport = new winston.transports.DailyRotateFile(
             maxSize:'20m',
             maxFiles:'14d'
         }
-    )
- export  const errorLogger = (mongourl)=> expressWinston.errorLogger({
-    transports:[
-        new winston.transports.Console(),
-        errorFileinfo,
+    ),
         mongoErrorTransport(mongourl),
         // elasticTransport
 

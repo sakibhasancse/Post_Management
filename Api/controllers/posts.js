@@ -4,15 +4,16 @@ import { NotFound } from './../utils/error';
 
 
 
+
 export const getposts = async (req, res, next) => {
     try {
         const posts =await getPostService()
-        let len =posts.length
+  
+       
 
-    res.status(200).json({
+    return res.status(200).json({
 
         success: true,
-        len,
         posts:posts
     })
 

@@ -5,9 +5,10 @@ import cors from 'cors'
 import dotenv from 'dotenv'
 import express from 'express'
 import morgan from 'morgan'
-import {infologger,errorLogger} from './Api/middlewares/logger'
-import { errorhandle  ,setCorrelationId} from './Api/middlewares/appMiddlewares'
-import {DBCON} from './config/dbCon'
+import { errorhandle, setCorrelationId } from './Api/middlewares/appMiddlewares'
+import { errorLogger, infologger } from './Api/middlewares/logger'
+import postRouter from './Api/router/posts'
+import { DBCON } from './config/dbCon'
 
 const app = express()
 
@@ -25,10 +26,16 @@ app.use(cors())
 
 DBCON(mongourl)
 app.use(setCorrelationId)
-import postRouter from './Api/router/posts'
-app.use(infologger() )
+
+if(process.env.PROCESSNAME !== 'TEST'){
+    app.use(infologger() )
+}
 app.use(postRouter)
-app.use(errorLogger (mongourl))
+
+if(process.env.PROCESSNAME !== 'TEST'){
+    app.use(errorLogger (mongourl))
+}
+
 app.use(errorhandle)
 
 export default app

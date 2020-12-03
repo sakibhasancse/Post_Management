@@ -13,6 +13,7 @@ export const getPostService =async()=>{
     const posts = await POST.find()
     return posts ;
 }
+
 export const updatePostService =async(id,body )=>{
     
     const post = await POST.findById(id)
